@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
     res.json({msg: "helllooo bitch"})
 })
 
-//DEFINING ROUTES BELOW // Connecting each route to a speciic file for organization.
+//DEFINING ROUTES BELOW // Connecting each route to a speciic file for organization. Location is under the routes folder
 
 app.use("/api/users", require("./routes/user"))
 app.use("/api/contact", require("./routes/contact"))

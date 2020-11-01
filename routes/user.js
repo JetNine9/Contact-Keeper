@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const config = require('config')
 const User = require("../model/User")
 const {check, validationResult} = require('express-validator')
 //
@@ -25,8 +27,6 @@ router.post("/",
 
     const {name, email, password} = req.body; // deconstructing from the JSON object that will contain the name, email and password
 
-
-
     try {
         let user = await User.findOne({email: email}) // findOne comes from mongoose. Looks for a user with email (line 25)
 
@@ -48,13 +48,29 @@ router.post("/",
         // save to database
         await user.save();
 
-        res.send("User saved");
+        //////////////////////// ESTABLISHING JSON WEB TOKEN BELOW ///////////////////////////////////
+
+        const payload = { // sending the user.id to the payload
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(payload, config.get('jwtSecret'), {
+            expiresIn: 36000
+        }, (err, token) => {
+            if (err) throw err;
+            res.json({token}); // this gives us back an object with a token
+        })
+
+        ///////////////////////// END OF ESTABLISHING JSON WEB TOKEN /////////////////////////////////////
 
     } catch (err) {
         console.error(err.message)
         res.status(500).send('Server Error')
     }
  }
+
 )
 
 module.exports = router;

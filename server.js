@@ -1,7 +1,17 @@
 const express = require("express");
+const connectDb = require("./config/db")
 
 const app = express();
 
+
+//connecting database code below
+connectDb();
+
+
+
+
+// Initialize Middleware -> by doing the code below we can now accept data
+app.use(express.json({extended: false}))
 
 
 app.get("/", (req, res) => {

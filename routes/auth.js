@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const auth = require('../middleware/auth')
 const config = require('config')
 const User = require("../model/User")
-const {check, validationResult} = require('express-validator')
+const {check, validationResult} = require('express-validator');
+const { findById } = require('../model/User');
 
 
 // End Point ->   POST REQUEST api/auth
@@ -70,8 +71,16 @@ async (req, res) => {
 // End Point -> api/auth GET REQUEST
 // Description - > GET LOGGED IN UER
 // ACCESS - > PRIVATE ACCESS
-router.get("/", (req, res) => {
-    res.send("GET LOGGED IN USER")
+// to protect this route I will pass in the middleware function as a second parameter.
+router.get("/", auth, async (req, res) => {
+    try {
+        // req object should have a user object attached to it with the currents users login id
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user)
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send("Server Error")
+    }
 })
 
 module.exports = router;

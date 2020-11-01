@@ -26,17 +26,22 @@ async (req, res) => {
     const {email, password} = req.body;
 
     try {
-        let user = await User.findOne({email});
+        /////////////// Section below checks if the user is in the database //////////////////////
 
+        let user = await User.findOne({email});
+        // if the users email does not exist the code below runs
         if (!user) {
             return res.status(400).json({msg: "Invalid Credentials"})
         }
 
         const isPasswordMatching = await bcrypt.compare(password, user.password); // bcrypt method to check if the password is correct
 
+        // if the users password does not exist the code below runs
         if (!isPasswordMatching) {
             return res.status(400).json({msg: "invalid password"})
         }
+
+        //////////////////////// ESTABLISHING JSON WEB TOKEN BELOW ///////////////////////////////////
 
         const payload = { // sending the user.id to the payload
             user: {

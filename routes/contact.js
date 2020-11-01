@@ -1,14 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth')
+const {check, validationResult} = require('express-validator')
+
+const User = require("../model/User")
+const Contact = require("../model/Contact")
 
 
 
 // End Point ->   GET REQUEST api/contacts
 // Description - > GET ALL USER CONTACTS
 // ACCESS - >      PRIVATE ACCESS
-router.get("/", (req, res) => {
-    res.send("Get ALL in a CONTACTS")
+router.get("/", auth, async (req, res) => {
+    try {
+        const contacts = await Contact.find({user: req.user.id}).sort({date: -1})
+        res.json(contacts);
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send("server error")
+    }
 })
 
 

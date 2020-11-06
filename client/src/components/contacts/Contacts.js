@@ -6,15 +6,28 @@ import ContactItem from './ContactItem'
 
     const contactContext = useContext(ContactContext);
 
-    const {contacts} = contactContext;
+    const {contacts, filtered} = contactContext;
+
+    if (contacts.length === 0) {
+        return <h4>please add a contact</h4>
+    }
 
     return (
         <Fragment>
-            {contacts.map((contact) => {
+
+            {/* // did a ternary operator below */}
+            {filtered !== null ? filtered.map((contact) => {
+                 return <ContactItem key={contact.id} contact={contact} />
+            }) :
+            contacts.map((contact) => {
                 return <ContactItem key={contact.id} contact={contact} />
             })}
+
+
+
         </Fragment>
-    )
+
+    );
 }
 
 export default Contacts;

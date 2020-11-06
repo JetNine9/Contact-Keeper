@@ -9,7 +9,7 @@ import {
     CLEAR_FILTER
 } from '../types'
 
-const switchStatement = (state, action) => {
+const contactReducer = (state, action) => { // state is the variable passed in from the UseReducer initialization
     switch (action.type) {
         case ADD_CONTACT:
             return {
@@ -21,7 +21,35 @@ const switchStatement = (state, action) => {
                 ...state,
                 contacts: state.contacts.filter((contact) =>  contact.id !== action.payload
                 )
+            };
+            case SET_CURRENT:
+            return {
+                ...state,
+                current: action.payload
             }
+            case CLEAR_CURRENT:
+            return {
+                ...state,
+                current: null
+            }
+            case UPDATE_CONTACT:
+            return {
+                ...state,
+                contacts: state.contacts.map(contact => contact.id === action.payload.id ? action.payload : contact)
+            }
+            case FILTER_CONTACTS:
+                return {
+                    ...state,
+                    filtered: state.contacts.filter((contact) => {
+                        const regex = new RegExp(`${action.payload}`, 'gi'); // gi so it is case incencitive
+                        return contact.name.match(regex) || contact.email.match(regex) // will return anything that matches the name thats passed in
+                    })
+                }
+            case CLEAR_FILTER:
+                return {
+                    ...state,
+                    filtered: null
+                }
 
         default:
             return state;
@@ -29,4 +57,4 @@ const switchStatement = (state, action) => {
 }
 
 
-export default switchStatement
+export default contactReducer

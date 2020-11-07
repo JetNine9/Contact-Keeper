@@ -9,12 +9,14 @@ import Login from './components/auth/Login'
 
 import ContactState from './context/contact/ContactState'
 import AuthState from './context/auth/AuthState'
+import AlertState from'./context/alert/AlertState'
 
 
 function App() {
   return (
     <AuthState>
       <ContactState>
+      <AlertState>
         <Router>
           <div>
             <Navbar />
@@ -28,6 +30,7 @@ function App() {
             </div>
           </div>
         </Router>
+        </AlertState>
       </ContactState>
     </AuthState>
   );

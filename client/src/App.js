@@ -6,30 +6,32 @@ import Home from './components/pages/Home'
 import About from './components/pages/About'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
+import Alerts from './components/layout/Alert'
 
 import ContactState from './context/contact/ContactState'
 import AuthState from './context/auth/AuthState'
-import AlertState from'./context/alert/AlertState'
+import AlertState from './context/alert/AlertState'
 
 
 function App() {
   return (
     <AuthState>
       <ContactState>
-      <AlertState>
-        <Router>
-          <div>
-            <Navbar />
-            <div className="container">
-              <Switch>
-                <Route exact path="/" component={Home} ></Route>
-                <Route exact path="/about" component={About} ></Route>
-                <Route exact path="/register" component={Register} ></Route>
-                <Route exact path="/login" component={Login} ></Route>
-              </Switch>
+        <AlertState>
+          <Router>
+            <div>
+              <Navbar />
+              <div className="container">
+                <Alerts/>
+                  <Switch>
+                    <Route exact path="/" component={Home} ></Route>
+                    <Route exact path="/about" component={About} ></Route>
+                    <Route exact path="/register" component={Register} ></Route>
+                    <Route exact path="/login" component={Login} ></Route>
+                  </Switch>
+              </div>
             </div>
-          </div>
-        </Router>
+          </Router>
         </AlertState>
       </ContactState>
     </AuthState>

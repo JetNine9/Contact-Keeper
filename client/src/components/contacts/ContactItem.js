@@ -11,7 +11,7 @@ import ContactContext from '../../context/contact/contactContext'
     const {type} = props.contact
 
     const onDelete = () => {
-        contactContext.deleteContact(props.contact.id)
+        contactContext.deleteContact(props.contact._id)
         contactContext.clearCurrent()
     }
 

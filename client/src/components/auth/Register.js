@@ -2,23 +2,29 @@ import React, { useState, useContext, useEffect } from 'react'
 import AlertContext from '../../context/alert/alertContext'
 import AuthContext from '../../context/auth/authContext'
 
-const Register = () => {
+const Register = (props) => {
 
     const alertContext = useContext(AlertContext);
     const authContext = useContext(AuthContext)
 
-    const {registerUser, error, clearErrors} = authContext;
+    const {registerUser, error, clearErrors, isAuthenticated} = authContext;
 
     // deconstruct setAlert from alertContext below
     const {setAlert} = alertContext;
 
 
     useEffect(() => {
+        // code below redirects if the user is logged in. Redirects to home page
+        if (isAuthenticated) {
+            props.history.push('/')
+        }
+
         if (error === "User already exist") {
             setAlert(error, "danger");
             clearErrors()
         }
-    }, [error])
+        // eslint-disable-next-line
+    }, [error, isAuthenticated, props.history])
 
     const [user, setUser] = useState({
         name: '',
@@ -76,12 +82,12 @@ const Register = () => {
 
                 <div className="form-group">
                     <label htmlFor="password" >Password</label>
-                    <input type="text" name="password" value={password} onChange={onChange} required minLength="6" ></input>
+                    <input type="password" name="password" value={password} onChange={onChange} required minLength="6" ></input>
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="password2" >Confirm Pass</label>
-                    <input type="text" name="password2" value={password2} onChange={onChange} required ></input>
+                    <input type="password" name="password2" value={password2} onChange={onChange} required ></input>
                 </div>
 
                 <input type="submit" value="Register" className="btn btn-primary btn-block" ></input>

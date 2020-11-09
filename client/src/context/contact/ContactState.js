@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import  {v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import ContactContext from './contactContext';
 import contactReducer from './contactReducer';
 import {
@@ -9,8 +10,12 @@ import {
     CLEAR_CURRENT,
     UPDATE_CONTACT,
     FILTER_CONTACTS,
-    CLEAR_FILTER
+    CLEAR_FILTER,
+    CONTACT_ERROR,
+    GET_CONTACTS,
+    CLEAR_CONTACTS
 } from '../types'
+
 
 
 // set initial state
@@ -18,50 +23,58 @@ const ContactState = (props) => {
 
 
     const initialState = {
-        contacts: [
-            {
-                id: 1,
-                name: "Lebron James",
-                email: "Lebron@goat.com",
-                phone: "111-111-111",
-                type: "Personal"
-            },
-            {
-                id: 2,
-                name: "Bronny James",
-                email: "Bronny@goat.com",
-                phone: "222-111-111",
-                type: "Personal"
-            },
-            {
-                id: 3,
-                name: "Bryce James",
-                email: "Bryce@goat.com",
-                phone: "333-111-111",
-                type: "Personal"
-            }
-        ],
-
+        contacts: [],
         current: null,
-        filtered: null // an array of filtered contacts.
+        filtered: null, // an array of filtered contacts.
+        error: null,
+        loading: true
+
     };
     // state gives us access to state, dispatch lets us dispatch objects to reducer
     const [state, dispatch] = useReducer(contactReducer, initialState)
 
+    // GET CONTACTS -> Hit that backend
+
+    const getContacts = async () => {
+        try {
+            const res = await axios.get('/api/contact')
+            dispatch({type:GET_CONTACTS, payload: res.data})
+
+        } catch (error) {
+
+            dispatch({type: CONTACT_ERROR, payload: error.response.msg })
+        }
+    }
+
     // Add Contact
-    const addContact = (contact) => {
-        contact.id = uuidv4(); // this is adding a new id from uuid
-        dispatch({type: ADD_CONTACT, payload: contact})
+    const addContact = async (contact) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        try {
+            const res = await axios.post('/api/contact', contact, config)
+
+            dispatch({type: ADD_CONTACT, payload: res.data})
+        } catch (error) {
+            dispatch({type: CONTACT_ERROR, payload: error.response })
+        }
+
+
     }
     // Delete Contact
-
     const deleteContact = (id) => {
         dispatch({type: DELETE_CONTACT, payload: id})
     }
 
+    // clear Contacts
+    const clearContacts = (() => {
+        dispatch({type: CLEAR_CONTACTS})
+    })
 
     //Set Current Contact
-
     const setCurrent =(contact) => {
         dispatch({type: SET_CURRENT, payload: contact})
     }
@@ -92,14 +105,16 @@ const ContactState = (props) => {
                 contacts: state.contacts,
                 current: state.current,
                 filtered: state.filtered,
+                error: state.error,
                 addContact,
                 deleteContact,
                 setCurrent,
                 clearCurrent,
                 updateContact,
                 filterContacts,
-                clearFilter
-
+                clearFilter,
+                getContacts,
+                clearContacts
             }}
         >
 

@@ -6,7 +6,10 @@ import {
     CLEAR_CURRENT,
     UPDATE_CONTACT,
     FILTER_CONTACTS,
-    CLEAR_FILTER
+    CLEAR_FILTER,
+    CONTACT_ERROR,
+    GET_CONTACTS,
+    CLEAR_CONTACTS
 } from '../types'
 
 const contactReducer = (state, action) => { // state is the variable passed in from the UseReducer initialization
@@ -49,6 +52,28 @@ const contactReducer = (state, action) => { // state is the variable passed in f
                 return {
                     ...state,
                     filtered: null
+                }
+            case CONTACT_ERROR:
+                return {
+                    ...state,
+                    error: action.payload
+                }
+
+            case GET_CONTACTS:
+
+                return {
+                    ...state,
+                    contacts: action.payload,
+
+                }
+
+            case CLEAR_CONTACTS:
+                return {
+                    ...state,
+                    contacts: null,
+                    filtered: null,
+                    error: null,
+                    current: null
                 }
 
         default:

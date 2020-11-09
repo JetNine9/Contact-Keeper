@@ -69,7 +69,7 @@ export const ContactForm = () => {
                 <input type="text" placeholder="Phone" name="phone" value={phone} onChange={onChange} ></input>
                 <h5>Contact Type</h5>
                 <input type="radio" name="type" value="personal" checked={type === "personal"} onChange={onChange} ></input> Personal{' '}
-                <input type="radio" name="type" value="personal" checked={type === "professional"} onChange={onChange} ></input> Professional{' '}
+                <input type="radio" name="type" value="professional" checked={type === "professional"} onChange={onChange} ></input> Professional{' '}
                 <div>
                     <input type="submit" value={contactContext.current ? 'Update Contact' : 'Add Contact'} className="btn btn-primary btn-block" ></input>
                 </div>

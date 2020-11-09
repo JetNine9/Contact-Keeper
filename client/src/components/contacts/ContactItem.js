@@ -25,7 +25,7 @@ import ContactContext from '../../context/contact/contactContext'
                 {props.contact.name}{' '}
                 <span
                 style={{float: "right"}}
-                className={'badge ' + (props.contact.type === "professional" ? "badge-sucess" : "badge-primary")}>
+                className={'badge ' + (props.contact.type === "professional" ? "badge-success" : "badge-primary")}>
                     {type.charAt(0).toUpperCase() + type.slice(1, type.length)}
                 </span>
             </h3>
